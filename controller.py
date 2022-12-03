@@ -21,7 +21,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
     def click_load_image(self) -> None:
         self.target_img_path, filter_type = QtWidgets.QFileDialog.getOpenFileName()
         print(f'load image: \n\timg_path={self.target_img_path}\n\tfilter_type={filter_type}')
-        target_img = cv2.imread(self.target_img_path, -1)
+        target_img = cv2.imread(self.target_img_path)
         height, width, channel = target_img.shape
         bytes_per_line = 3 * width
         self.label_showImg.setPixmap(QPixmap.fromImage(QImage(target_img.data, width, height, bytes_per_line, QImage.Format_RGB888).rgbSwapped()))
@@ -29,6 +29,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def click_send(self) -> None:
         radio_btns = [self.radioBtn_woman, self.radioBtn_man, self.radioBtn_all]
+        select_sex = None
         for b in radio_btns:
             if b.isChecked():
                 select_sex = b.text()
