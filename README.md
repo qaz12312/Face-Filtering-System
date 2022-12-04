@@ -4,7 +4,7 @@
 + `main.py` 進入點
 
 ## Features
-+ `faceObtain.py` 提取臉部並存在 dataset https://colab.research.google.com/drive/1LOlYpzbhoYSLAtIHMmnjrED55hmrM87_
++ `face_obtain.py` 提取臉部並存進 dataset (人臉偵測與辨識: https://colab.research.google.com/drive/1LOlYpzbhoYSLAtIHMmnjrED55hmrM87_)
 + `ui.py` 介面
 + `controller.py` UI 的 controller
 + `face_compare.py` 比對臉部特徵
@@ -16,3 +16,7 @@
 
 ## Reference
 + face dataset: https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/
+
+## 補充
++ 偵測臉部表情 https://github.com/justinshenk/fer?bclid=IwAR23r-_y_isTnQEbi8M1Dx3rNSCBt6AKOR5yY5zFWd3Lu1kzRQwSz7w6BzU
++ https://github.com/Vishwesh4/Face-Feature-Extraction

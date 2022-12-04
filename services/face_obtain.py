@@ -1,17 +1,14 @@
 """
 source:
-使用MTCNN模型來偵測人臉，用FaceNet提取臉部特徵
+使用MTCNN模型來偵測人臉
 """
 import mtcnn
-import cv2
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.models import load_model
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-# from IPython.display import display
-import temp_variables
-import utils
+import services.utils as utils
+import config.temp_variables as vars
 
 def get_img_pixels(source_type:str, path:str)->np.array:
     '''
@@ -30,19 +27,6 @@ def get_img_pixels(source_type:str, path:str)->np.array:
     pixels_arr = tf.keras.preprocessing.image.img_to_array(img_pil)
     # pixels_arr = np.expand_dims(pixels_arr, axis=0) # shape=(1, 寬, 高, channels數) --> 有時模型要求的輸入為(None(表batch), 寬, 高, channels數)
     return pixels_arr
-
-
-def get_model(file_name:str):
-    '''
-    載入model，若本地端無檔案則儲存在 temp_variables.PROJECT_PATH/facenet/file_name
-    '''
-    # (檔案名稱, 原始url, 緩存file位置, 存在哪個子dir下, 解壓縮檔案)
-    file_locl_path = tf.keras.utils.get_file(file_name, origin=temp_variables.FACENET_URL, cache_dir=temp_variables.PROJECT_PATH, cache_subdir='facenet', extract=False)
-    model = load_model(file_locl_path)
-    # (Keras model instance, 結構圖存放位置, 顯示shape資訊, 顯示layer名稱, Dots per inch)
-    model_arch = tf.keras.utils.plot_model(model, to_file='./facenet/model_arch.png', show_shapes=True, show_layer_names=True, dpi=64)
-    # display(model_arch)  # print 結構圖
-    return model
 
 
 def show_detected_img(pixels:np.array, detected:list)->None:
@@ -74,49 +58,50 @@ def extract_face_save(pixels:np.array, detected:list)->list:
     '''
     save 偵測到的結果圖
     '''
-    utils.folder_exist('./datasets')
-    face_img = list()
+    utils.folder_exist(vars.FACES_PATH)
+    img_prefix = f'{utils.get_timestamp()}'
+    img_paths = list()
     for i, i_result in enumerate(detected):
-        plt.figure()
+        plt.figure(figsize=(6, 6))
         x1, y1, width, height = i_result['box']
         bias_x, bias_y = width/4, height/4
         x1, y1 = round(abs(x1)-bias_x), round(abs(y1)-bias_y)
         x2, y2 = round(x1 + width + 2 * bias_x), round(y1 + height + bias_y)
-        face = cv2.resize(pixels[y1:y2, x1:x2], (160, 160)).astype('float32')
+        face = pixels[y1:y2, x1:x2].astype('float32')
         plt.imshow(face/255)
-        face_img.append(face)
         plt.axis(False)
-        plt.tight_layout()           
-        plt.savefig(f'./datasets/{i + 1}.png')
+        plt.tight_layout()
+        img_path = f'{vars.FACES_PATH}/{img_prefix}_{i + 1}.png'       
+        plt.savefig(img_path)
+        img_paths.append(img_path)
         plt.title(f'{i_result["confidence"]:.2f}')
         plt.show()
-    return face_img
+    return img_paths
 
 
-def get_face_embedding(model, face_img):
-    '''
-    輸入一張人臉照片提取特徵，把它表示成一個d維空間的向量
-    '''
-    face_img = (face_img-tf.math.reduce_mean(face_img))/tf.math.reduce_std(face_img)
-    embedding = model.predict(face_img[tf.newaxis,:])
-    embedding = embedding/tf.norm(embedding)
-    return embedding
+def face_obtain(img_path:str) -> tuple:
+    try:
+        detector = mtcnn.MTCNN()
+        pixels_arr = get_img_pixels('file', img_path)
+        results_list = detector.detect_faces(pixels_arr)
+        if len(results_list) == 0:
+            raise ValueError('沒有偵測到人臉')
+        show_detected_img(pixels_arr, results_list)
+        img_paths = extract_face_save(pixels_arr, results_list)
+        return True, img_paths
+    except ValueError as e:
+        msg, = e.args
+        return False, msg
 
 
 if __name__ == '__main__':
-    img_path = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTu0rkPWvi3aDNYySS7OpYDxic3qp0aIvxqQ&usqp=CAU'
-    model = get_model('keras_model.h5')
-    # create the mtcnn face detector
-    detector = mtcnn.MTCNN()
-    pixels_arr = get_img_pixels('url', img_path)
-    results_list = detector.detect_faces(pixels_arr)
-    show_detected_img(pixels_arr, results_list)
-    face_imgs = extract_face_save(pixels_arr, results_list)
-    face_embedding = list()
-    for img in face_imgs:
-        embedding = get_face_embedding(model, img)
-        face_embedding.append(embedding)
-    face_embedding = np.vstack(face_embedding)
-
-
-
+    try:
+        img_path = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTu0rkPWvi3aDNYySS7OpYDxic3qp0aIvxqQ&usqp=CAU'
+        # create the mtcnn face detector
+        detector = mtcnn.MTCNN()
+        pixels_arr = get_img_pixels('url', img_path)
+        results_list = detector.detect_faces(pixels_arr)
+        show_detected_img(pixels_arr, results_list)
+        face_imgs = extract_face_save(pixels_arr, results_list)
+    except ValueError as msg:
+        print(msg)
