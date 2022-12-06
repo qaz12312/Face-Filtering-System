@@ -35,7 +35,7 @@ def show_detected_img(pixels:np.array, detected:list)->None:
     pixels: 原圖
     detected: 偵測到的臉範圍、眼睛*2、鼻子、嘴巴*2
     '''
-    plt.figure(figsize=(pixels.shape[1]*6//pixels.shape[0], 6)) # =( round((h/w)*6), 6 )
+    plt.figure(figsize=(pixels.shape[1]*3//pixels.shape[0], 3)) # =( round((h/w)*6), 6 )
     plt.imshow(pixels/255)
     plt.axis(False)
     ax = plt.gca()
@@ -62,7 +62,7 @@ def extract_face_save(pixels:np.array, detected:list)->list:
     img_prefix = f'{utils.get_timestamp()}'
     img_paths = list()
     for i, i_result in enumerate(detected):
-        plt.figure(figsize=(6, 6))
+        plt.figure(figsize=(3, 3))
         x1, y1, width, height = i_result['box']
         bias_x, bias_y = width/4, height/4
         x1, y1 = round(abs(x1)-bias_x), round(abs(y1)-bias_y)
