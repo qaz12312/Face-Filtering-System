@@ -151,7 +151,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QGroupBox" name="groupBox_resultCount">
+    <widget class="QGroupBox" name="groupBox_result_count">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -194,7 +194,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="select_resultCount">
+        <widget class="QComboBox" name="select_result_count">
          <property name="cursor">
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
@@ -251,7 +251,7 @@
       </layout>
      </widget>
     </widget>
-    <widget class="QGroupBox" name="groupBox_loadImg">
+    <widget class="QGroupBox" name="groupBox_load_img">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -263,7 +263,7 @@
      <property name="title">
       <string>匯入目標圖片</string>
      </property>
-     <widget class="QPushButton" name="pushBtn_loadImg">
+     <widget class="QPushButton" name="pushBtn_load_img">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -276,7 +276,7 @@
        <string>載入圖片</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_showImg">
+     <widget class="QLabel" name="label_show_img">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -402,13 +402,13 @@
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QMenu" name="menu_facialSelection">
+   <widget class="QMenu" name="menu_facial_selection">
     <property name="title">
      <string>五官選取</string>
     </property>
    </widget>
    <addaction name="menu_similarity"/>
-   <addaction name="menu_facialSelection"/>
+   <addaction name="menu_facial_selection"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
