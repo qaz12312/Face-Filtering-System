@@ -62,7 +62,7 @@ def extract_face_save(pixels:np.array, detected:list)->list:
     img_prefix = f'{utils.get_timestamp()}'
     img_paths = list()
     for i, i_result in enumerate(detected):
-        plt.figure(figsize=(3, 3))
+        plt.figure(figsize=(3, 3))  # 設定結果圖的圖片大小
         x1, y1, width, height = i_result['box']
         bias_x, bias_y = width/4, height/4
         x1, y1 = round(abs(x1)-bias_x), round(abs(y1)-bias_y)

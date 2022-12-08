@@ -1,6 +1,5 @@
 from deepface import DeepFace
-import numpy as np
-import pandas as pd
+
 
 def face_compare(img_path, db_path, show):
     '''
