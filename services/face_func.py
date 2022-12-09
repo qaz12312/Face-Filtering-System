@@ -2,6 +2,8 @@ from deepface import DeepFace
 import pandas as pd
 import cv2
 import dlib
+import glob
+import math
 
 def face_compare(img_path, db_path, show):
     '''
@@ -22,7 +24,7 @@ def face_analyze(img_path):
     '''
     img_path: imput image
 
-    return: dictionary, tuple of age, gender and race
+    return: dictionary, including image path and tuple of age, gender and race
     '''
 
     try:
@@ -34,34 +36,79 @@ def face_analyze(img_path):
 
     return face
 
-def feature_extraction(img_path):
+def feature_detection(size, db_path, show):
     '''
-    img_path: input image
+    size: list of big (0), small (1), or both (2) (1st: eyes, 2nd: nose, 3rd: lips)
+    db_path: database we want to detect
+    show: how many images we want to show
 
-    return: tuple of age, gender and race
+    return: list of image paths
     '''
 
+    path = glob.glob(db_path+r'*.jpg')
     detector = dlib.get_frontal_face_detector()
     predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
+    cnt = 0
+    path_list = []
 
-    img = cv2.imread(img_path)
-    gray = cv2.cvtColor(src=img, code=cv2.COLOR_BGR2GRAY)
+    for p in path:
+        img = cv2.imread(p)
+        gray = cv2.cvtColor(src=img, code=cv2.COLOR_BGR2GRAY)
+        faces = detector(gray)
+        eyes = False
+        nose = False
+        lips = False
 
-    faces = detector(gray)
-    for face in faces:
-        x1 = face.left() # left point
-        y1 = face.top() # top point
-        x2 = face.right() # right point
-        y2 = face.bottom() # bottom point
+        for face in faces:
+            landmarks = predictor(image=gray, box=face)
 
-        landmarks = predictor(image=gray, box=face)
+            # eyes
+            x1 = landmarks.part(41).x
+            y1 = landmarks.part(41).y
+            x2 = landmarks.part(37).x
+            y2 = landmarks.part(37).y
+            dist = math.sqrt(pow(x1-x2, 2)+pow(y1-y2, 2))
+            
+            if size[0] == 0 and dist >= 6.55787101128489:
+                eyes = True
+            elif size[0] == 1 and dist < 6.55787101128489:
+                eyes = True
+            elif size[0] == 2:
+                eyes = True
 
-        for n in range(0, 68):
-            x = landmarks.part(n).x
-            y = landmarks.part(n).y
+            # nose
+            x1 = landmarks.part(31).x
+            y1 = landmarks.part(31).y
+            x2 = landmarks.part(35).x
+            y2 = landmarks.part(35).y
+            dist = math.sqrt(pow(x1-x2, 2)+pow(y1-y2, 2))
+            
+            if size[0] == 0 and dist >= 26.780501027381277:
+                nose = True
+            elif size[0] == 1 and dist < 26.780501027381277:
+                nose = True
+            elif size[0] == 2:
+                nose = True
 
-            cv2.circle(img=img, center=(x, y), radius=3, color=(0, 255, 0), thickness=-1)
+            # lips
+            x1 = landmarks.part(66).x
+            y1 = landmarks.part(66).y
+            x2 = landmarks.part(57).x
+            y2 = landmarks.part(57).y
+            dist = math.sqrt(pow(x1-x2, 2)+pow(y1-y2, 2))
+            
+            if size[0] == 0 and dist >= 8.456254699988639:
+                lips = True
+            elif size[0] == 1 and dist < 8.456254699988639:
+                lips = True
+            elif size[0] == 2:
+                lips = True
 
-    cv2.imshow(winname="Face", mat=img)
-    cv2.waitKey(delay=0)
-    cv2.destroyAllWindows()
+        if eyes == True and nose == True and lips == True:
+            path_list.append(p)
+            cnt += 1    
+
+        if cnt == show:
+            break
+
+    return path_list
