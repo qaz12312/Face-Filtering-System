@@ -91,7 +91,7 @@ def face_obtain(img_path:str) -> tuple:
         return True, img_paths
     except ValueError as e:
         msg, = e.args
-        return False, msg
+        return True, [img_path]
 
 
 if __name__ == '__main__':

@@ -127,8 +127,8 @@ class Ui_MainWindow(object):
         self.radioBtn_all_eye.setText(_translate("self.form_facial_selection", "不拘"))
         # nose
         self.groupBox_nose_facial.setTitle(_translate("self.form_facial_selection", "選擇鼻子"))
-        self.radioBtn_long.setText(_translate("self.form_facial_selection", "長"))
-        self.radioBtn_short.setText(_translate("self.form_facial_selection", "短"))
+        self.radioBtn_long.setText(_translate("self.form_facial_selection", "寬"))
+        self.radioBtn_short.setText(_translate("self.form_facial_selection", "窄"))
         self.radioBtn_all_nose.setText(_translate("self.form_facial_selection", "不拘"))
         # mouth
         self.groupBox_mouth_facial.setTitle(_translate("self.form_facial_selection", "選擇嘴巴"))

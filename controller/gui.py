@@ -252,7 +252,7 @@ class GUIController(QtWidgets.QMainWindow, Ui_MainWindow):
         self.scrollAreaWidgetContents_result.setMinimumSize(QSize(300, 200*rows)) # 寬、長
         for i in range(total):
             img_path = results[i]['path']
-            rank = f"{results[i]['analyze']}"
+            rank = f"{results[i]['analyze'][0]} / {results[i]['analyze'][1]} / {results[i]['analyze'][2]}"
             if i ==0:
                 self.label_result_img.setPixmap(self._img_to_QPixmap(img_path))
                 self.label_result_name.setText(rank)
@@ -293,7 +293,7 @@ class GUIController(QtWidgets.QMainWindow, Ui_MainWindow):
         self.scrollAreaWidgetContents_result_facial.setMinimumSize(QSize(300, 200*rows)) # 寬、長
         for i in range(total):
             img_path = results[i]['path']
-            rank = f"{results[i]['analyze']}"
+            rank = f"{results[i]['analyze'][0]} / {results[i]['analyze'][1]} / {results[i]['analyze'][2]}"
             if i ==0:
                 self.label_facial_result_img.setPixmap(self._img_to_QPixmap(img_path))
                 self.label_facial_result_name.setText(rank)
@@ -332,9 +332,10 @@ class GUIController(QtWidgets.QMainWindow, Ui_MainWindow):
         btn_name = self.sender().objectName()
         if btn_name == 'commandLinkButton_send':
             results = self._send_similarity_requires()
+            print('\n\n', results)
             if isinstance(results, dict):
                 QtWidgets.QMessageBox.about(self, results['errTitle'], results['errMsg'])
-            elif len(results) == 0:
+            elif len(results[0]) == 0:
                 QtWidgets.QMessageBox.about(self, "唉呦", "沒有找到指定的相似五官")
             else:
                 self.current_result[self.current_page] = results
@@ -343,7 +344,7 @@ class GUIController(QtWidgets.QMainWindow, Ui_MainWindow):
             results = self._send_facial_selection_requires()
             if isinstance(results, dict):
                 QtWidgets.QMessageBox.about(self, results['errTitle'], results['errMsg'])
-            elif len(results) == 0:
+            elif len(results[0]) == 0:
                 QtWidgets.QMessageBox.about(self, "唉呦", "沒有找到指定的目標五官")
             else:
                 self.current_result[self.current_page] = results

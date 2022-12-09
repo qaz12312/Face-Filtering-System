@@ -47,12 +47,13 @@ def feature_detection(size, db_path, show):
 
     path = glob.glob(db_path+r'*.jpg')
     detector = dlib.get_frontal_face_detector()
-    predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
+    predictor = dlib.shape_predictor("/home/hedy881028/pattern_rec/services/shape_predictor_68_face_landmarks.dat")
     cnt = 0
     path_list = []
 
     for p in path:
         img = cv2.imread(p)
+        img = cv2.resize(img, (300, 300))
         gray = cv2.cvtColor(src=img, code=cv2.COLOR_BGR2GRAY)
         faces = detector(gray)
         eyes = False

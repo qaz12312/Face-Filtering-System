@@ -38,7 +38,7 @@ def export_to_csv(file_name:str, results:list)->tuple:
         for i in range(total_row):
             record = results[i]
             gender = record['analyze'][1]
-            height = round(random.gauss(180, 5)) if gender ==1 else round(random.gauss(170, 5))
+            height = round(random.gauss(180, 5)) if gender =='Man' else round(random.gauss(170, 5))
             # 值放到相對應的 column
             s = pd.Series([names[i], gender, record['analyze'][0], record['analyze'][2], height, random.randint(38, 80)],
                         index=["姓名", "性別", "年齡", "種族", "身高", "體重"])
