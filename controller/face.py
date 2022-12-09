@@ -36,16 +36,13 @@ class FaceController(object):
                 tmp.append(analyze)
 
             faces.append(tmp)
-        
-        print(f'[FaceController] Get: sex={sex}, count={count}, img_paths={img_path}')
-
         return faces
 
-    def find_specified_type_faces(self, sex:int, count:int)->list:
+    def find_specified_type_faces(self, sex:int, face:int, eyebrow:int, eye:int, nose:int, mouth:int, count:int)->list:
         """
         查找指定類型的面部
         """
-        print(f'[FaceController] Get: sex={sex}, count={count}')
+        print(f'\n[FaceController]\nGet: sex={sex}, face={face}, eyebrow={eyebrow}, eye={eye}, nose={nose}, mouth={mouth}, count={count}')
         return []
 
     def __repr__(self):

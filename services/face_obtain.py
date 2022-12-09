@@ -51,7 +51,7 @@ def show_detected_img(pixels:np.array, detected:list)->None:
         # plot 眼睛*2、鼻子、嘴巴*2
         for val in i_result['keypoints'].values():
             ax.add_patch(mpatches.Circle(val, 1, color='blue'))
-    plt.show()
+    # plt.show()
 
 
 def extract_face_save(pixels:np.array, detected:list)->list:
@@ -75,7 +75,7 @@ def extract_face_save(pixels:np.array, detected:list)->list:
         plt.savefig(img_path)
         img_paths.append(img_path)
         plt.title(f'{i_result["confidence"]:.2f}')
-        plt.show()
+        # plt.show()
     return img_paths
 
 
