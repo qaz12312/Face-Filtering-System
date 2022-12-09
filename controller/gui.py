@@ -134,7 +134,8 @@ class GUIController(QtWidgets.QMainWindow, Ui_MainWindow):
         elif len(results) == 0:
             QtWidgets.QMessageBox.about(self, "唉呦", "沒有找到指定的目標五官")
         else:
-            pass
+            print('\n\nsend:', results)
+
 
     def click_export(self) -> None:
         """
