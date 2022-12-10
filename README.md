@@ -1,5 +1,5 @@
-# pattern_rec
-> 1111 圖訊專論
+# Face Filtering System
+> pattern recognition applications
 
 + `main.py` 進入點
 
@@ -9,10 +9,6 @@
 + `.\services\face_obtain.py` 提取臉部並存進 dataset (人臉偵測與辨識: https://colab.research.google.com/drive/1LOlYpzbhoYSLAtIHMmnjrED55hmrM87_)
 + `.\services\face_compare.py` 比對臉部特徵
     + 需要的 pickle 檔：https://drive.google.com/drive/u/1/folders/1DW4skGaJ0sK6sPp-O1AwAIcJqTX6wE2W
-
-## Fix
-
-## Enhance
 
 ## Reference
 + face dataset: https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/
